@@ -13,11 +13,11 @@
     "name": {
       "type": "string"
     },
-    "adress": {
+    "address": {
       "type": "string",
       "required": true
     },
-    "adress2": {
+    "address2": {
       "type": "string",
       "required": false
     },
