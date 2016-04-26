@@ -2,5 +2,14 @@
   "db": {
     "name": "db",
     "connector": "memory"
+  },
+  "mariadb": {
+    "name": "mariadb",
+    "connector": "mysql",
+    "database" : "pld_smartcity",
+    "host" : "localhost",
+    "password" : "",
+    "username" : "root",
+    "port" : "3306"
   }
 }
