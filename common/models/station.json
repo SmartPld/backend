@@ -1,0 +1,56 @@
+{
+  "name": "station",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "number": {
+      "type": "number",
+      "required": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "adress": {
+      "type": "string",
+      "required": true
+    },
+    "adress2": {
+      "type": "string",
+      "required": false
+    },
+    "commune": {
+      "type": "string",
+      "required": true
+    },
+    "nmarrond": {
+      "type": "number",
+      "required": true
+    },
+    "bonus": {
+      "type": "boolean",
+      "required": true
+    },
+    "pole": {
+      "type": "string"
+    },
+    "pos": {
+      "type": "geopoint",
+      "required": true
+    },
+    "gid": {
+      "type": "number",
+      "required": true
+    },
+    "altitude": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
