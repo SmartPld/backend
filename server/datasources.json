@@ -4,12 +4,12 @@
     "connector": "memory"
   },
   "mariadb": {
+    "host": "localhost",
+    "port": "3306",
+    "database": "pld_smartcity",
+    "username": "root",
+    "password": "",
     "name": "mariadb",
-    "connector": "mysql",
-    "database" : "pld_smartcity",
-    "host" : "localhost",
-    "password" : "",
-    "username" : "root",
-    "port" : "3306"
+    "connector": "mysql"
   }
 }

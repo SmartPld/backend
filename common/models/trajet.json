@@ -1,0 +1,46 @@
+{
+  "name": "trajet",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "station_start" : {
+      "type": "number",
+      "required": true
+    },
+    "station_end": {
+      "type": "number",
+      "required": true
+    },
+    "validite_start": {
+      "type": "date",
+      "required": true
+    },
+    "validite_end": {
+      "type": "date",
+      "required": true
+    },
+    "max_number": {
+      "type": "number",
+      "required": true
+    },
+    "distance": {
+      "type": "number",
+      "required": true
+    },
+    "delta_elevation": {
+      "type": "number",
+      "required": true
+    },
+    "points": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

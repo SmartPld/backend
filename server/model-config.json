@@ -35,5 +35,9 @@
   "station": {
     "dataSource": "mariadb",
     "public": true
+  },
+  "trajet": {
+    "dataSource": "mariadb",
+    "public": true
   }
 }
