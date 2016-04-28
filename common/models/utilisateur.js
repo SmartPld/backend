@@ -43,41 +43,43 @@ module.exports = function(Utilisateur) {
     Utilisateur.disableRemoteMethod('__get__history', false);
     Utilisateur.disableRemoteMethod('__updateById__history', false);
 
+
     Utilisateur.accepttrajet = function(user, trajet, cb) {
 
         var Trajet = app.models.Trajet;
-        console.log('a');
-
+        
         Utilisateur.findById(user, function(err, userFound) {
             if(err)
                 throw err;
             else{
                 if(userFound){
-                    Trajet.findById(trajet, function(err, trajetFound){
-                        if(err)
+                    userFound.current_trajet(function(err,current_trajet){
+                       if(err)
                             throw err;
-                        else{
-                            if(trajetFound){
-                                userFound.current_trajet(trajetFound);
-                                userFound.current_trajet(trajetFound.id);
-                                userFound.current_trajet({
-                                    station_start: 1321,
-                                    station_end: 1244,
-                                    validite_start: new Date(),
-                                    validite_end: new Date(),
-                                    max_number: 8,
-                                    distance: 3,
-                                    delta_elevation: 15,
-                                    points: 99
+                       else{
+                           if (current_trajet != null){
+                                console.log("User is already assigned to a task.")
+                                cb("User is already assigned to a task.",null);
+                           }
+                           else{
+                                Trajet.findById(trajet, function(err, trajetFound){
+                                    if(err)
+                                        throw err;
+                                    else{
+                                        if(trajetFound){
+                                            userFound.current_trajet(trajetFound);
+                                            userFound.save(function(err,obj){if (err){ throw err }});
+                                            console.log("OK - Utilisateur associé au trajet : " + userFound);
+                                            cb(err,trajetFound);
+                                        }
+                                    }
                                 });
-                                cb(trajetFound);
-                            }
-                        }
+                           }
+                        } 
                     });
                 }
             }
         });
-
     };
 
     Utilisateur.remoteMethod(
