@@ -40,13 +40,13 @@ var createTrajets = function(Trajet, Station){
             throw err;
         }
 
-        for(var i = 0; i < 500; i++){
+        for(var i = 0; i < 2; i++){
             station_rand1 = Math.floor(Math.random() * all_stations.length);
             station_rand2 = Math.floor(Math.random() * all_stations.length);
 
             trajets.push({
-                station_start : all_stations[station_rand1].id,
-                station_end : all_stations[station_rand2].id,
+                station_start : {id : all_stations[station_rand1].id},
+                station_end : {id : all_stations[station_rand2].id},
                 validite_start : new Date(),
                 validite_end : new Date(),
                 max_number : Math.floor(Math.random() * 10),
@@ -69,9 +69,8 @@ var createUsers = function(Utilisateur){
         if(err)
             throw err;
         else
-            console.log(users);
+            console.log("-- 2 users loaded.");
     });
-    console.log("-- 2 users loaded.");
 };
 // ======================================================
 

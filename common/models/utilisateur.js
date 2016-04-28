@@ -58,10 +58,18 @@ module.exports = function(Utilisateur) {
                             throw err;
                         else{
                             if(trajetFound){
-                                console.log(trajetFound);
-                                console.log(userFound);
                                 userFound.current_trajet(trajetFound);
                                 userFound.current_trajet(trajetFound.id);
+                                userFound.current_trajet({
+                                    station_start: 1321,
+                                    station_end: 1244,
+                                    validite_start: new Date(),
+                                    validite_end: new Date(),
+                                    max_number: 8,
+                                    distance: 3,
+                                    delta_elevation: 15,
+                                    points: 99
+                                });
                                 cb(trajetFound);
                             }
                         }
