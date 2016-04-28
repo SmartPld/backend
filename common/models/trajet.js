@@ -42,7 +42,6 @@ module.exports = function(Trajet) {
                 if(err)
                     throw err;
                 else{
-                    console.log(stationStartFound);
                     Station.findById(parseInt(trajet.station_end.id), function(err, stationEndFound){
                         if(err)
                             throw err;

@@ -40,7 +40,7 @@ var createTrajets = function(Trajet, Station){
             throw err;
         }
 
-        for(var i = 0; i < 2; i++){
+        for(var i = 0; i < 500; i++){
             station_rand1 = Math.floor(Math.random() * all_stations.length);
             station_rand2 = Math.floor(Math.random() * all_stations.length);
 
