@@ -1,0 +1,37 @@
+{
+  "name": "utilisateur",
+  "plural": "users",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id_velov": {
+      "type": "number"
+    },
+    "salt": {
+      "type": "string",
+      "required": true
+    },
+    "points": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "history": {
+      "type": "hasAndBelongsToMany",
+      "model": "trajet",
+      "foreignKey": ""
+    },
+    "current_trajet": {
+      "type": "belongsTo",
+      "model": "trajet",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

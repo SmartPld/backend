@@ -6,7 +6,7 @@
     "validateUpsert": true
   },
   "properties": {
-    "station_start" : {
+    "station_start": {
       "type": "number",
       "required": true
     },

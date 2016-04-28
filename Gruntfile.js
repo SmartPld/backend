@@ -7,7 +7,7 @@ module.exports = function(grunt) {
                     app: './server/server',
                     config: './server/model-config',
                     method: 'autoupdate',
-                    exclude : ['User', 'user']
+                    exclude : []
                 }
             },
             'db_automigrate': {
@@ -16,7 +16,7 @@ module.exports = function(grunt) {
                     app: './server/server',
                     config: './server/model-config',
                     method: 'automigrate',
-                    exclude : ['User', 'user']
+                    exclude : []
                 }
             }
         }
