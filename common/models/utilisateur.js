@@ -121,7 +121,6 @@ module.exports = function(Utilisateur) {
                                     if (err) throw err;
                                 });
                                 userFound.points += current_trajet.points;
-                                console.log(userFound);
                                 userFound.en_trajet = false;
                                 userFound.save(function(err,userModified){
                                     if (err){ throw err;}
@@ -155,7 +154,6 @@ module.exports = function(Utilisateur) {
                         } else {
                             cb("No current trajet.",null);
                         }
-                        console.log(current_trajet);
                     });
                 } else {
                     cb("User not found.",null);

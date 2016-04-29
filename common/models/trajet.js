@@ -2,7 +2,7 @@ module.exports = function(Trajet) {
 
     var app = require('../../server/server');
 
-    Trajet.disableRemoteMethod("create", true);
+    //Trajet.disableRemoteMethod("create", true);
     Trajet.disableRemoteMethod("upsert", true);
     Trajet.disableRemoteMethod("updateAll", true);
     Trajet.disableRemoteMethod("deleteById", true);

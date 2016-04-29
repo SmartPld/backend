@@ -1,5 +1,5 @@
 var app = require('./server');
-var stations_json = require('./test.json');
+var stations_json = require('./data.json');
 
 // ======================================================
 var createStations = function(Station, list_stations){
@@ -22,7 +22,7 @@ var createStations = function(Station, list_stations){
         list_stations[i].bonus = (list_stations[i].bonus == "Oui");
         list_stations[i].open = (list_stations[i].status == "OPEN");
         list_stations[i].gid = parseInt(list_stations[i].gid);
-        list_stations[i].altitude = 0;
+        //list_stations[i].altitude = 0;
     }
 
     Station.create(list_stations);
