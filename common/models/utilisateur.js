@@ -48,33 +48,40 @@ module.exports = function(Utilisateur) {
 
         var Trajet = app.models.Trajet;
         
+        
         Utilisateur.findById(user, function(err, userFound) {
             if(err)
                 throw err;
             else{
                 if(userFound){
-                    userFound.current_trajet(function(err,current_trajet){
-                       if(err)
+                    userFound.current_trajet(function AssignUserToTrajet (err,current_trajet){
+                        if(err)
                             throw err;
-                       else{
-                           if (current_trajet != null){
+                        else{
+                            if (current_trajet != null){
                                 console.log("User is already assigned to a task.")
                                 cb("User is already assigned to a task.",null);
-                           }
-                           else{
+                            }
+                            else{
                                 Trajet.findById(trajet, function(err, trajetFound){
                                     if(err)
                                         throw err;
+                                    else if (trajetFound.max_number < 1){
+                                        cb("Trajet Found is not available anymore.",null);
+                                    }
                                     else{
                                         if(trajetFound){
                                             userFound.current_trajet(trajetFound);
                                             userFound.save(function(err,obj){if (err){ throw err }});
-                                            console.log("OK - Utilisateur associé au trajet : " + userFound);
+                                            trajetFound.max_number -= 1;
+                                            trajetFound.save(function(err,obj){if (err){ throw err }});
+                                            
+                                            console.log("OK - Utilisateur associé au trajet : " + string(userFound);
                                             cb(err,trajetFound);
                                         }
                                     }
                                 });
-                           }
+                            }
                         } 
                     });
                 }
