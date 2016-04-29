@@ -57,13 +57,14 @@ module.exports = function(Utilisateur) {
 
         var Trajet = app.models.Trajet;
         
+        
         Utilisateur.findById(user, function(err, userFound) {
             if(err)
                 throw err;
             else{
                 if(userFound){
-                    userFound.current_trajet(function(err,current_trajet){
-                       if(err)
+                    userFound.current_trajet(function AssignUserToTrajet (err,current_trajet){
+                        if(err)
                             throw err;
                        else{
                            if (userFound.en_trajet){
@@ -72,20 +73,26 @@ module.exports = function(Utilisateur) {
                                 Trajet.findById(trajet, function(err, trajetFound){
                                     if(err)
                                         throw err;
+                                    else if (trajetFound.max_number < 1){
+                                        cb("Trajet Found is not available anymore.",null);
+                                    }
                                     else{
                                         if(trajetFound){
                                             userFound.current_trajet(trajetFound);
                                             userFound.en_trajet = true;
                                             userFound.save(function(err,obj){if (err){ throw err }});
-                                            console.log("OK - Utilisateur associé au trajet : " + userFound);
+                                            trajetFound.max_number -= 1;
+                                            trajetFound.save(function(err,obj){if (err){ throw err }});
+                                            
+                                            //console.log("OK - Utilisateur associé au trajet : " + string(userFound));
                                             cb(err,trajetFound);
                                         }else {
                                             cb("Trajet not found.",null);
                                         }
                                     }
                                 });
-                           }
-                       }
+                            }
+                        }
                     });
                 }else {
                     cb("User not found.",null);
