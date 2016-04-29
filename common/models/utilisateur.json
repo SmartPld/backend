@@ -17,6 +17,11 @@
     "points": {
       "type": "number",
       "required": true
+    },
+    "en_trajet": {
+      "type": "number",
+      "required": true,
+      "default": false
     }
   },
   "validations": [],

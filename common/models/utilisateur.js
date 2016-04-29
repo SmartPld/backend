@@ -35,13 +35,22 @@ module.exports = function(Utilisateur) {
     Utilisateur.disableRemoteMethod('__get__accessTokens', false);
     Utilisateur.disableRemoteMethod('__updateById__accessTokens', false);
 
+    Utilisateur.disableRemoteMethod('__get__current_trajet', false);
+
+    Utilisateur.disableRemoteMethod('__exists__history', false);
+    Utilisateur.disableRemoteMethod('__link__history', false);
+    Utilisateur.disableRemoteMethod('__destroy__history', false);
+    Utilisateur.disableRemoteMethod('__update__history', false);
+    Utilisateur.disableRemoteMethod('__unlink__history', false);
+    Utilisateur.disableRemoteMethod('__count__history', false);
     Utilisateur.disableRemoteMethod('__create__history', false);
     Utilisateur.disableRemoteMethod('__delete__history', false);
     Utilisateur.disableRemoteMethod('__count__history', false);
     Utilisateur.disableRemoteMethod('__destroyById__history', false);
     Utilisateur.disableRemoteMethod('__findById__history', false);
-    Utilisateur.disableRemoteMethod('__get__history', false);
+    //Utilisateur.disableRemoteMethod('__get__history', false);
     Utilisateur.disableRemoteMethod('__updateById__history', false);
+    Utilisateur.disableRemoteMethod('____history', false);
 
 
     Utilisateur.accepttrajet = function(user, trajet, cb) {
@@ -57,26 +66,92 @@ module.exports = function(Utilisateur) {
                        if(err)
                             throw err;
                        else{
-                           if (current_trajet != null){
-                                console.log("User is already assigned to a task.")
+                           if (userFound.en_trajet){
                                 cb("User is already assigned to a task.",null);
-                           }
-                           else{
+                           }else{
                                 Trajet.findById(trajet, function(err, trajetFound){
                                     if(err)
                                         throw err;
                                     else{
                                         if(trajetFound){
                                             userFound.current_trajet(trajetFound);
+                                            userFound.en_trajet = true;
                                             userFound.save(function(err,obj){if (err){ throw err }});
                                             console.log("OK - Utilisateur associé au trajet : " + userFound);
                                             cb(err,trajetFound);
+                                        }else {
+                                            cb("Trajet not found.",null);
                                         }
                                     }
                                 });
                            }
-                        } 
+                       }
                     });
+                }else {
+                    cb("User not found.",null);
+                }
+            }
+        });
+    };
+
+    Utilisateur.validetrajet = function(user, cb) {
+
+        var Trajet = app.models.Trajet;
+
+        Utilisateur.findById(user, function(err, userFound) {
+            if(err)
+                throw err;
+            else{
+                if(userFound){
+                    userFound.current_trajet(function(err,current_trajet){
+                        if(err)
+                            throw err;
+                        else{
+                            if (!userFound.en_trajet) {
+                                cb("No task to validate.", null);
+                            }else{
+                                userFound.history.add(current_trajet.id, function (err) {
+                                    if (err) throw err;
+                                });
+                                userFound.points += current_trajet.points;
+                                console.log(userFound);
+                                userFound.en_trajet = false;
+                                userFound.save(function(err,userModified){
+                                    if (err){ throw err;}
+                                    else {
+                                        delete userModified.current_trajetId;
+                                        cb(err, userModified);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    cb("User not found.",null);
+                }
+            }
+        });
+    };
+
+    Utilisateur.currenttrajet = function(user, cb) {
+
+        var Utilisateur = app.models.Utilisateur;
+
+        Utilisateur.findById(user, function(err, userFound){
+            if(err)
+                throw err;
+            else{
+                if(userFound){
+                    userFound.current_trajet(function(err, current_trajet){
+                        if(current_trajet && userFound.en_trajet){
+                            cb(err, current_trajet);
+                        } else {
+                            cb("No current trajet.",null);
+                        }
+                        console.log(current_trajet);
+                    });
+                } else {
+                    cb("User not found.",null);
                 }
             }
         });
@@ -96,4 +171,31 @@ module.exports = function(Utilisateur) {
             }
         }
     );
+    Utilisateur.remoteMethod(
+        'validetrajet',
+        {
+            accepts: [
+                {arg: 'user', type: 'number'}
+            ],
+            returns: {arg: 'user', type: 'utilisateur'},
+            http: {
+                verb: 'post',
+                path: '/:user/validetrajet'
+            }
+        }
+    );
+    Utilisateur.remoteMethod(
+        'currenttrajet',
+        {
+            accepts: [
+                {arg: 'user', type: 'number'}
+            ],
+            returns: {arg: 'trajet', type: 'Trajet'},
+            http: {
+                verb: 'post',
+                path: '/:user/currenttrajet'
+            }
+        }
+    );
+
 };

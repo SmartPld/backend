@@ -12,27 +12,6 @@ module.exports = function(Trajet) {
     Trajet.disableRemoteMethod("findOne", true);
     Trajet.disableRemoteMethod("exists", true);
 
-    /*Trajet.getter['station_start'] = function() {
-
-        Station = app.models.Station;
-        /*Station.find(this.station_start, function(err, stationFound){
-            if(err)
-                throw err;
-            else
-                return 1;
-        });
-    };
-
-    Trajet.getter['station_end'] = function() {
-
-        Station = app.models.Station;
-        /*Station.find(this.station_end, function(err, stationFound){
-            if(err)
-                throw err;
-            else
-                return 2;
-        });
-    };*/
 
     Trajet.observe('before save', function (ctx, next) {
         var trajet = ctx.instance;
