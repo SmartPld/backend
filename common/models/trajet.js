@@ -29,6 +29,8 @@ module.exports = function(Trajet) {
                         else if(stationEndFound){
                             trajet.station_start = stationStartFound;
                             trajet.station_end = stationEndFound;
+                            trajet.validite_start = new Date();
+                            trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
                             next();
                         } else {
                             var errTrajet = new Error("Trajet number " + trajet.station_end.number + " does not exists.");
