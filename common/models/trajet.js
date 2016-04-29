@@ -17,20 +17,27 @@ module.exports = function(Trajet) {
         var trajet = ctx.instance;
         if (trajet) {
             Station = app.models.Station;
-            Station.findById(parseInt(trajet.station_start.id), function(err, stationStartFound){
+            console.log(trajet.station_start.number);
+            console.log(trajet.station_end.number);
+            Station.findOne({where: {number : trajet.station_start.number}}, function(err, stationStartFound){
                 if(err)
                     throw err;
-                else{
-                    Station.findById(parseInt(trajet.station_end.id), function(err, stationEndFound){
+                else if(stationStartFound){
+                    Station.findOne({where: {number : trajet.station_end.number}}, function(err, stationEndFound){
                         if(err)
                             throw err;
-                        else {
-                            //console.log(stationFound);
+                        else if(stationEndFound){
                             trajet.station_start = stationStartFound;
                             trajet.station_end = stationEndFound;
                             next();
+                        } else {
+                            var errTrajet = new Error("Trajet number " + trajet.station_end.number + " does not exists.");
+                            next(errTrajet);
                         }
                     });
+                } else {
+                    var errTrajet = new Error("Trajet number " + trajet.station_start.number + " does not exists.");
+                    next(errTrajet);
                 }
             });
             //trajet.station_start = 1;
