@@ -14,6 +14,14 @@
       "type": "station",
       "required": true
     },
+    "nb_station_start": {
+      "type": "number",
+      "required": true
+    },
+    "nb_station_end": {
+      "type": "number",
+      "required": true
+    },
     "validite_start": {
       "type": "date",
       "required": true

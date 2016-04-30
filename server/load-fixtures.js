@@ -3,6 +3,9 @@ var stations_json = require('./data.json');
 
 // ======================================================
 var createStations = function(Station, list_stations){
+
+    numbers = [];
+
     for (var i = 0; i < list_stations.length; i++) {
         delete list_stations[i].bike_stands;
         delete list_stations[i].availability;
@@ -23,6 +26,8 @@ var createStations = function(Station, list_stations){
         list_stations[i].open = (list_stations[i].status == "OPEN");
         list_stations[i].gid = parseInt(list_stations[i].gid);
         //list_stations[i].altitude = 0;
+
+        numbers.push(list_stations[i].number);
     }
 
     Station.create(list_stations);
@@ -45,8 +50,8 @@ var createTrajets = function(Trajet, Station){
             station_rand2 = Math.floor(Math.random() * all_stations.length);
 
             trajets.push({
-                station_start : {id : all_stations[station_rand1].id},
-                station_end : {id : all_stations[station_rand2].id},
+                nb_station_start : numbers[station_rand1],
+                nb_station_end : numbers[station_rand2],
                 validite_start : new Date(),
                 validite_end : new Date(),
                 max_number : Math.floor(Math.random() * 10),

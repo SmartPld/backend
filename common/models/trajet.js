@@ -6,44 +6,62 @@ module.exports = function(Trajet) {
     Trajet.disableRemoteMethod("upsert", true);
     Trajet.disableRemoteMethod("updateAll", true);
     Trajet.disableRemoteMethod("deleteById", true);
-    Trajet.disableRemoteMethod("updateAttributes", false);
+    //Trajet.disableRemoteMethod("updateAttributes", false);
     Trajet.disableRemoteMethod("createChangeStream", true);
     Trajet.disableRemoteMethod("count", true);
     Trajet.disableRemoteMethod("findOne", true);
     Trajet.disableRemoteMethod("exists", true);
 
-
     Trajet.observe('before save', function (ctx, next) {
-        var trajet = ctx.instance;
-        if (trajet) {
-            Station = app.models.Station;
-            console.log(trajet.station_start.number);
-            console.log(trajet.station_end.number);
-            Station.findOne({where: {number : trajet.station_start.number}}, function(err, stationStartFound){
-                if(err)
+
+        /*console.log('----------------------- instance');
+        console.log(ctx.instance);
+        console.log('----------------------- current instance');
+        console.log(ctx.currentInstance);*/
+
+        Station = app.models.Station;
+        Trajet = app.models.Trajet;
+
+        if(!ctx.isNewInstance) {
+            // On recup le trajet
+            var trajet = ctx.currentInstance;
+
+            trajet.validite_start = new Date();
+            trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
+
+            next();
+        } else {
+            // On recup le trajet
+            var trajet = ctx.instance;
+
+            Station.findOne({where: {number: trajet.nb_station_start}}, function (err, stationStartFound) {
+                if (err)
                     throw err;
-                else if(stationStartFound){
-                    Station.findOne({where: {number : trajet.station_end.number}}, function(err, stationEndFound){
-                        if(err)
+                else if (stationStartFound) {
+                    // Recherche de la bonne station d'arrivee
+                    Station.findOne({where: {number: trajet.nb_station_end}}, function (err, stationEndFound) {
+                        if (err)
                             throw err;
-                        else if(stationEndFound){
+                        else if (stationEndFound) {
                             trajet.station_start = stationStartFound;
                             trajet.station_end = stationEndFound;
                             trajet.validite_start = new Date();
                             trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
                             next();
                         } else {
-                            var errTrajet = new Error("Trajet number " + trajet.station_end.number + " does not exists.");
+                            var errTrajet = new Error("Trajet number " + trajet.nb_station_end + " does not exists.");
                             next(errTrajet);
                         }
                     });
                 } else {
-                    var errTrajet = new Error("Trajet number " + trajet.station_start.number + " does not exists.");
+                    var errTrajet = new Error("Trajet number " + trajet.nb_station_start + " does not exists.");
                     next(errTrajet);
                 }
             });
-            //trajet.station_start = 1;
-            //trajet.station_end = 2;
         }
+        // Recherche de la bonne station de depart
+        //trajet.station_start = 1;
+        //trajet.station_end = 2;
+
     });
 };
