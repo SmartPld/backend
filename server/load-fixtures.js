@@ -43,8 +43,8 @@ var createTrajets = function(Trajet, Station){
         for(var i = 0; i < 500; i++){
             station_rand1 = Math.floor(Math.random() * all_stations.length);
             station_rand2 = Math.floor(Math.random() * all_stations.length);
-
-            trajets.push({
+            
+            nouveauTrajet = {
                 station_start : {id : all_stations[station_rand1].id},
                 station_end : {id : all_stations[station_rand2].id},
                 validite_start : new Date(),
@@ -53,7 +53,8 @@ var createTrajets = function(Trajet, Station){
                 points : Math.floor(Math.random() * 100),
                 distance : Math.random() * 20,
                 delta_elevation : Math.random() * 50
-            });
+            }
+            trajets.push(nouveauTrajet);
         }
         Trajet.create(trajets);
         console.log("-- " + trajets.length + " random trajets loaded.");
