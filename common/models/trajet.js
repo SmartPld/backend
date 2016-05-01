@@ -29,6 +29,8 @@ module.exports = function(Trajet) {
 
     Trajet.delete = function(id, cb) {
 
+        Utilisateur = app.models.Utilisateur;
+
         Trajet.findById(id, function(err, trajetFound){
             if(err)
                 throw err;
@@ -41,11 +43,19 @@ module.exports = function(Trajet) {
                             if(users.length > 0){
                                 cb({status:"403", message : "At least one user made this trajet."}, null);
                             } else {
-                                Trajet.destroyById(trajetFound.id, function (err) {
+                                Utilisateur.findOne({where : {current_trajetId : trajetFound.id}}, function(err, userFound){
                                     if(err)
                                         throw err;
-                                    else
-                                        cb({status:"204", message : "Trajet successfully deleted."}, null);
+                                    else if(userFound){
+                                        cb({status:"403", message : "At least one user is making this trajet."}, null);
+                                    } else {
+                                        Trajet.destroyById(trajetFound.id, function (err) {
+                                            if(err)
+                                                throw err;
+                                            else
+                                                cb({status:"204", message : "Trajet successfully deleted."}, null);
+                                        });
+                                    }
                                 });
                             }
                         }
