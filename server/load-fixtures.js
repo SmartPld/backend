@@ -57,8 +57,7 @@ var createTrajets = function(Trajet, Station){
                 points : Math.floor(Math.random() * 100),
                 distance : Math.random() * 20,
                 delta_elevation : Math.random() * 50
-            }
-            trajets.push(nouveauTrajet);
+            });
         }
         Trajet.create(trajets);
         console.log("-- " + trajets.length + " random trajets loaded.");
