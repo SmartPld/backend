@@ -249,5 +249,4 @@ module.exports = function(Utilisateur) {
             }
         }
     );
-
 };

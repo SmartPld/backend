@@ -47,6 +47,6 @@
   },
   "utilisateurtrajet": {
     "dataSource": "mariadb",
-    "public": true
+    "public": false
   }
 }

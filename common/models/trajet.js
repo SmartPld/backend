@@ -12,6 +12,64 @@ module.exports = function(Trajet) {
     Trajet.disableRemoteMethod("findOne", true);
     Trajet.disableRemoteMethod("exists", true);
 
+    Trajet.disableRemoteMethod('__exists__users', false);
+    Trajet.disableRemoteMethod('__link__users', false);
+    Trajet.disableRemoteMethod('__destroy__users', false);
+    Trajet.disableRemoteMethod('__update__users', false);
+    Trajet.disableRemoteMethod('__unlink__users', false);
+    Trajet.disableRemoteMethod('__count__users', false);
+    Trajet.disableRemoteMethod('__create__users', false);
+    Trajet.disableRemoteMethod('__delete__users', false);
+    Trajet.disableRemoteMethod('__count__users', false);
+    Trajet.disableRemoteMethod('__destroyById__users', false);
+    Trajet.disableRemoteMethod('__findById__users', false);
+    Trajet.disableRemoteMethod('__get__users', false);
+    Trajet.disableRemoteMethod('__updateById__users', false);
+    Trajet.disableRemoteMethod('____users', false);
+
+    Trajet.delete = function(id, cb) {
+
+        Trajet.findById(id, function(err, trajetFound){
+            if(err)
+                throw err;
+            else {
+                if(trajetFound){
+                    trajetFound.users(function(err, users){
+                        if(err)
+                            throw err;
+                        else{
+                            if(users.length > 0){
+                                cb({status:"403", message : "At least one user made this trajet."}, null);
+                            } else {
+                                Trajet.destroyById(trajetFound.id, function (err) {
+                                    if(err)
+                                        throw err;
+                                    else
+                                        cb({status:"204", message : "Trajet successfully deleted."}, null);
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    cb({status:"404", message : "Trajet not found."}, null);
+                }
+            }
+        });
+    };
+
+    Trajet.remoteMethod(
+        'delete',
+        {
+            accepts: [
+                {arg: 'id', type: 'number'}
+            ],
+            http: {
+                verb: 'delete',
+                path: '/:id'
+            }
+        }
+    );
+
     Trajet.observe('before save', function (ctx, next) {
 
         /*console.log('----------------------- instance');
