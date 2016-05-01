@@ -24,7 +24,7 @@ module.exports = function(Trajet) {
 
         if(!ctx.isNewInstance) {
             // On recup le trajet
-            var trajet = ctx.currentInstance;
+            var trajet = ctx.currentInstance || ctx.instance;
 
             trajet.validite_start = new Date();
             trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);

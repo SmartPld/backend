@@ -1,6 +1,7 @@
 module.exports = function(Utilisateur) {
 
     var app = require('../../server/server');
+    var loopback = require('loopback');
 
     /*
      To erase the ACLs set for User ( base Class ) and apply those in config
@@ -56,110 +57,147 @@ module.exports = function(Utilisateur) {
     Utilisateur.accepttrajet = function(user, trajet, cb) {
 
         var Trajet = app.models.Trajet;
+
+        var ctx = loopback.getCurrentContext();
+        var currentUser = ctx && ctx.get('currentUser');
+
+        if(currentUser) {
+            if(currentUser.id == user) {
         
-        
-        Utilisateur.findById(user, function(err, userFound) {
-            if(err)
-                throw err;
-            else{
-                if(userFound){
-                    userFound.current_trajet(function AssignUserToTrajet (err,current_trajet){
-                        if(err)
-                            throw err;
-                       else{
-                           if (userFound.en_trajet){
-                                cb("User is already assigned to a task.",null);
-                           }else{
-                                Trajet.findById(trajet, function(err, trajetFound){
-                                    if(err)
-                                        throw err;
-                                    else if (trajetFound.max_number < 1){
-                                        cb("Trajet Found is not available anymore.",null);
+                Utilisateur.findById(user, function(err, userFound) {
+                    if(err)
+                        throw err;
+                    else{
+                        if(userFound){
+                            userFound.current_trajet(function AssignUserToTrajet (err,current_trajet){
+                                if(err)
+                                    throw err;
+                               else{
+                                   if (userFound.en_trajet){
+                                        cb("User is already assigned to a task.",null);
+                                   }else{
+                                        Trajet.findById(trajet, function(err, trajetFound){
+                                            if(err)
+                                                throw err;
+                                            else{
+                                                if(trajetFound){
+                                                    if (trajetFound.max_number < 1){
+                                                        cb("Trajet Found is not available anymore.",null);
+                                                    } else {
+                                                        userFound.current_trajet(trajetFound);
+                                                        userFound.en_trajet = true;
+                                                        userFound.save(function(err,obj){if (err){ throw err }});
+                                                        trajetFound.max_number -= 1;
+                                                        trajetFound.save(function(err,obj){if (err){ throw err }});
+
+                                                        //console.log("OK - Utilisateur associé au trajet : " + string(userFound));
+                                                        cb(err,trajetFound);
+                                                    }
+                                                }else {
+                                                    cb("Trajet not found.",null);
+                                                }
+                                            }
+                                        });
                                     }
-                                    else{
-                                        if(trajetFound){
-                                            userFound.current_trajet(trajetFound);
-                                            userFound.en_trajet = true;
-                                            userFound.save(function(err,obj){if (err){ throw err }});
-                                            trajetFound.max_number -= 1;
-                                            trajetFound.save(function(err,obj){if (err){ throw err }});
-                                            
-                                            //console.log("OK - Utilisateur associé au trajet : " + string(userFound));
-                                            cb(err,trajetFound);
-                                        }else {
-                                            cb("Trajet not found.",null);
-                                        }
-                                    }
-                                });
-                            }
+                                }
+                            });
+                        }else {
+                            cb("User not found.",null);
                         }
-                    });
-                }else {
-                    cb("User not found.",null);
-                }
+                    }
+                });
+
+            } else {
+                cb({status:"403", message : "You are not allowed to perform this action."}, null);
             }
-        });
+        } else {
+            cb({status:"401", message : "You must be authenticated."}, null);
+        }
     };
 
     Utilisateur.validetrajet = function(user, cb) {
 
         var Trajet = app.models.Trajet;
 
-        Utilisateur.findById(user, function(err, userFound) {
-            if(err)
-                throw err;
-            else{
-                if(userFound){
-                    userFound.current_trajet(function(err,current_trajet){
-                        if(err)
-                            throw err;
-                        else{
-                            if (!userFound.en_trajet) {
-                                cb("No task to validate.", null);
-                            }else{
-                                userFound.history.add(current_trajet.id, function (err) {
-                                    if (err) throw err;
-                                });
-                                userFound.points += current_trajet.points;
-                                userFound.en_trajet = false;
-                                userFound.save(function(err,userModified){
-                                    if (err){ throw err;}
-                                    else {
-                                        delete userModified.current_trajetId;
-                                        cb(err, userModified);
+        var ctx = loopback.getCurrentContext();
+        var currentUser = ctx && ctx.get('currentUser');
+
+        if(currentUser) {
+            if(currentUser.id == user) {
+
+                Utilisateur.findById(user, function(err, userFound) {
+                    if(err)
+                        throw err;
+                    else{
+                        if(userFound){
+                            userFound.current_trajet(function(err,current_trajet){
+                                if(err)
+                                    throw err;
+                                else{
+                                    if (!userFound.en_trajet) {
+                                        cb("No task to validate.", null);
+                                    }else{
+                                        userFound.history.add(current_trajet.id, function (err) {
+                                            if (err) throw err;
+                                        });
+                                        userFound.points += current_trajet.points;
+                                        userFound.en_trajet = false;
+                                        userFound.save(function(err,userModified){
+                                            if (err){ throw err;}
+                                            else {
+                                                delete userModified.current_trajetId;
+                                                cb(err, userModified);
+                                            }
+                                        });
                                     }
-                                });
-                            }
+                                }
+                            });
+                        } else {
+                            cb("User not found.",null);
                         }
-                    });
-                } else {
-                    cb("User not found.",null);
-                }
+                    }
+                });
+
+            } else {
+                cb({status:"403", message : "You are not allowed to perform this action."}, null);
             }
-        });
+        } else {
+            cb({status:"401", message : "You must be authenticated."}, null);
+        }
     };
 
     Utilisateur.currenttrajet = function(user, cb) {
 
         var Utilisateur = app.models.Utilisateur;
 
-        Utilisateur.findById(user, function(err, userFound){
-            if(err)
-                throw err;
-            else{
-                if(userFound){
-                    userFound.current_trajet(function(err, current_trajet){
-                        if(current_trajet && userFound.en_trajet){
-                            cb(err, current_trajet);
+        var ctx = loopback.getCurrentContext();
+        var currentUser = ctx && ctx.get('currentUser');
+
+        if(currentUser) {
+            if(currentUser.id == user) {
+                Utilisateur.findById(user, function (err, userFound) {
+                    if (err)
+                        throw err;
+                    else {
+                        if (userFound) {
+                            userFound.current_trajet(function (err, current_trajet) {
+                                if (current_trajet && userFound.en_trajet) {
+                                    cb(err, current_trajet);
+                                } else {
+                                    cb("No current trajet.", null);
+                                }
+                            });
                         } else {
-                            cb("No current trajet.",null);
+                            cb("User not found.", null);
                         }
-                    });
-                } else {
-                    cb("User not found.",null);
-                }
+                    }
+                });
+            } else {
+                cb({status:"403", message : "You are not allowed to perform this action."}, null);
             }
-        });
+        } else {
+            cb({status:"401", message : "You must be authenticated."}, null);
+        }
     };
 
     Utilisateur.remoteMethod(
@@ -197,7 +235,7 @@ module.exports = function(Utilisateur) {
             ],
             returns: {arg: 'trajet', type: 'Trajet'},
             http: {
-                verb: 'post',
+                verb: 'get',
                 path: '/:user/currenttrajet'
             }
         }
