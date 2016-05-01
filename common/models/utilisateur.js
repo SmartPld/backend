@@ -9,7 +9,7 @@ module.exports = function(Utilisateur) {
      */
     Utilisateur.settings.acls.length = 0;
 
-    Utilisateur.disableRemoteMethod("create", true);
+    //Utilisateur.disableRemoteMethod("create", true);
     Utilisateur.disableRemoteMethod("upsert", true);
     Utilisateur.disableRemoteMethod("updateAll", true);
     Utilisateur.disableRemoteMethod("updateAttributes", false);
@@ -249,4 +249,22 @@ module.exports = function(Utilisateur) {
             }
         }
     );
+
+    Utilisateur.observe('before save', function (ctx, next) {
+
+        if(!ctx.isNewInstance) {
+
+            next();
+
+        } else {
+            // On recup le nouvel utilisateur
+            var newUser = ctx.instance;
+
+            newUser.points = 0;
+            newUser.en_trajet = false;
+            newUser.created = new Date();
+
+            next();
+        }
+    });
 };
