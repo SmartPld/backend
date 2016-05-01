@@ -44,5 +44,9 @@
   "utilisateur": {
     "dataSource": "mariadb",
     "public": true
+  },
+  "utilisateurtrajet": {
+    "dataSource": "mariadb",
+    "public": true
   }
 }

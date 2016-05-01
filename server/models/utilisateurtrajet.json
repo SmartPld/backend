@@ -1,0 +1,30 @@
+{
+  "name": "utilisateurtrajet",
+  "plural": "n",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "date_validation": {
+      "type": "date",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+      "trajet": {
+        "type": "belongsTo",
+        "model": "trajet",
+        "foreignKey": "trajetId"
+      },
+      "utilisateur": {
+        "type": "belongsTo",
+        "model": "utilisateur",
+        "foreignKey": "utilisateurId"
+      }
+  },
+  "acls": [],
+  "methods": {}
+}

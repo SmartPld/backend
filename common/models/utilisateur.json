@@ -26,15 +26,16 @@
   },
   "validations": [],
   "relations": {
-    "history": {
-      "type": "hasAndBelongsToMany",
-      "model": "trajet",
-      "foreignKey": ""
-    },
     "current_trajet": {
       "type": "belongsTo",
       "model": "trajet",
       "foreignKey": ""
+    },
+    "history": {
+      "type": "hasMany",
+      "model": "trajet",
+      "foreignKey": "utilisateurId",
+      "through": "utilisateurtrajet"
     }
   },
   "acls": [],

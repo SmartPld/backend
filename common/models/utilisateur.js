@@ -118,6 +118,7 @@ module.exports = function(Utilisateur) {
     Utilisateur.validetrajet = function(user, cb) {
 
         var Trajet = app.models.Trajet;
+        var UtilisateurTrajet = app.models.utilisateurtrajet;
 
         var ctx = loopback.getCurrentContext();
         var currentUser = ctx && ctx.get('currentUser');
@@ -137,8 +138,16 @@ module.exports = function(Utilisateur) {
                                     if (!userFound.en_trajet) {
                                         cb("No task to validate.", null);
                                     }else{
-                                        userFound.history.add(current_trajet.id, function (err) {
+                                        /*userFound.history.add(current_trajet.id, function (err) {
                                             if (err) throw err;
+                                        });*/
+                                        UtilisateurTrajet.create({
+                                            date_validation : new Date(),
+                                            utilisateurId : userFound.id,
+                                            trajetId : current_trajet.id
+                                        }, function(err, utilisateurtrajet){
+                                            if(err)
+                                                throw err;
                                         });
                                         userFound.points += current_trajet.points;
                                         userFound.en_trajet = false;
@@ -220,7 +229,7 @@ module.exports = function(Utilisateur) {
             accepts: [
                 {arg: 'user', type: 'number'}
             ],
-            returns: {arg: 'user', type: 'utilisateur'},
+            returns: {arg: 'utilisateur', type: 'utilisateur'},
             http: {
                 verb: 'post',
                 path: '/:user/validetrajet'
@@ -233,7 +242,7 @@ module.exports = function(Utilisateur) {
             accepts: [
                 {arg: 'user', type: 'number'}
             ],
-            returns: {arg: 'trajet', type: 'Trajet'},
+            returns: {arg: 'current_trajet', type: 'Trajet'},
             http: {
                 verb: 'get',
                 path: '/:user/currenttrajet'

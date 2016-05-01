@@ -48,7 +48,14 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+      "users": {
+      "type": "hasMany",
+      "model": "utilisateur",
+      "foreignKey": "trajetId",
+      "through": "utilisateurtrajet"
+    }
+  },
   "acls": [],
   "methods": {}
 }

@@ -64,16 +64,31 @@ var createTrajets = function(Trajet, Station){
     });
 };
 // ======================================================
-var createUsers = function(Utilisateur){
+var createUsers = function(Utilisateur, Role, RoleMapping){
 
     Utilisateur.create([
+        {username: 'admin', email: 'adming@insa-lyon.fr', password: 'password', 'salt' : 'poiuytreza', points : 0},
         {username: 'Guigui', email: 'guillaume.kheng@insa-lyon.fr', password: 'password', 'salt' : 'poiuytreza', points : 42},
         {username: 'Kilian', email: 'kilian.ollivier@insa-lyon.fr', password: 'password', 'salt' : 'poiuytreza', points : 0}
     ], function(err, users){
         if(err)
             throw err;
         else
-            console.log("-- 2 users loaded.");
+        {
+            Role.create({
+                name: 'admin'
+            }, function(err, role) {
+                if (err) cb(err);
+
+                //make bob an admin
+                role.principals.create({
+                    principalType: RoleMapping.Utilisateur,
+                    principalId: users[0].id
+                }, function(err, principal) {
+                    console.log("-- " + users.length + " users loaded.");
+                });
+            });
+        }
     });
 };
 // ======================================================
@@ -82,6 +97,8 @@ var createUsers = function(Utilisateur){
 var Station = app.models.Station;
 var Trajet = app.models.Trajet;
 var Utilisateur = app.models.Utilisateur;
+var Role = app.models.Role;
+var RoleMapping = app.models.RoleMapping;
 
 Station.destroyAll(function(err){
     if (err){
@@ -103,7 +120,7 @@ Station.destroyAll(function(err){
                 throw err;
             }
             console.log("-- Users table cleared.");
-            createUsers(Utilisateur);
+            createUsers(Utilisateur, Role, RoleMapping);
         });
     });
 });
