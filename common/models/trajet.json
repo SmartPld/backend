@@ -22,6 +22,10 @@
       "type": "number",
       "required": true
     },
+    "pos_station_start": {
+      "type": "geopoint",
+      "required": true
+    },
     "validite_start": {
       "type": "date",
       "required": true

@@ -112,6 +112,7 @@ module.exports = function(Trajet) {
                             throw err;
                         else if (stationEndFound) {
                             trajet.station_start = stationStartFound;
+                            trajet.pos_station_start = stationStartFound.pos;
                             trajet.station_end = stationEndFound;
                             trajet.validite_start = new Date();
                             trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
