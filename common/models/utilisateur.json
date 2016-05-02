@@ -35,5 +35,6 @@
     }
   },
   "acls": [],
-  "methods": {}
+  "methods": {},
+  "hidden" : ["current_trajetId"]
 }

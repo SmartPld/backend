@@ -97,6 +97,35 @@ module.exports = function(Trajet) {
             trajet.validite_start = new Date();
             trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
 
+            /*Trajet.findById(trajet.id, function(err, originalTrajet){
+                if(err)
+                    throw err;
+                else{
+                    if(originalTrajet){
+                        console.log(trajet);
+                        console.log(originalTrajet);
+                        if(trajet.nb_station_start != originalTrajet.nb_station_start){
+
+                            next({status : 403, message : "You're not allowed to change nb_station_start."});
+
+                        }else if(trajet.nb_station_end != originalTrajet.nb_station_end){
+
+                            next({status : 403, message : "You're not allowed to change the nb_station_end."});
+
+                        }else if(JSON.stringify(trajet.pos_station_start) != JSON.stringify(originalTrajet.pos_station_start)){
+
+                            next({status : 403, message : "You're not allowed to change the pos_station_start."});
+
+                        } else {
+
+                            next();
+
+                        }
+                    } else {
+                        next({status : 403, message : "You're not allowed to change the id."});
+                    }
+                }
+            });*/
             next();
         } else {
             // On recup le trajet
@@ -118,13 +147,11 @@ module.exports = function(Trajet) {
                             trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
                             next();
                         } else {
-                            var errTrajet = new Error("Trajet number " + trajet.nb_station_end + " does not exists.");
-                            next(errTrajet);
+                            next({status : 404, message : "Trajet number " + trajet.nb_station_end + " does not exists."});
                         }
                     });
                 } else {
-                    var errTrajet = new Error("Trajet number " + trajet.nb_station_start + " does not exists.");
-                    next(errTrajet);
+                    next({status : 404, message : "Trajet number " + trajet.nb_station_end + " does not exists."});
                 }
             });
         }

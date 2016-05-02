@@ -209,6 +209,33 @@ module.exports = function(Utilisateur) {
         }
     };
 
+    Utilisateur.findwithid = function(user, cb) {
+
+        var ctx = loopback.getCurrentContext();
+        var currentUser = ctx && ctx.get('currentUser');
+
+        if(currentUser) {
+            if(currentUser.id == user) {
+                Utilisateur.findById(user, function (err, userFound) {
+                    if (err)
+                        throw err;
+                    else {
+                        if (userFound) {
+                            cb(err, userFound);
+                        } else {
+                            cb("User not found.", null);
+                        }
+                    }
+                });
+            } else {
+                cb({status:"403", message : "You are not allowed to perform this action."}, null);
+            }
+        } else {
+            cb({status:"401", message : "You must be authenticated."}, null);
+        }
+
+    };
+
     Utilisateur.remoteMethod(
         'accepttrajet',
         {
@@ -246,6 +273,19 @@ module.exports = function(Utilisateur) {
             http: {
                 verb: 'get',
                 path: '/:user/currenttrajet'
+            }
+        }
+    );
+    Utilisateur.remoteMethod(
+        'findwithid',
+        {
+            accepts: [
+                {arg: 'user', type: 'number'}
+            ],
+            returns: {arg: 'utilisateur', type: 'Utilisateur'},
+            http: {
+                verb: 'get',
+                path: '/:user'
             }
         }
     );
