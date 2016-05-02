@@ -90,8 +90,8 @@ module.exports = function(Utilisateur) {
                                                         trajetFound.max_number -= 1;
                                                         trajetFound.save(function(err,obj){if (err){ throw err }});
 
-                                                        //console.log("OK - Utilisateur associé au trajet : " + string(userFound));
-                                                        cb(err,trajetFound);
+                                                        userFound.trajet = trajetFound;
+                                                        cb(err,userFound);
                                                     }
                                                 }else {
                                                     cb("Trajet not found.",null);
@@ -243,7 +243,7 @@ module.exports = function(Utilisateur) {
                 {arg: 'user', type: 'number'},
                 {arg: 'trajet', type: 'number'}
             ],
-            returns: {arg: 'current_trajet', type: 'Trajet'},
+            returns: {arg: 'utilisateur', type: 'Utilisateur'},
             http: {
                 verb: 'post',
                 path: '/:user/accepttrajet/:trajet'
