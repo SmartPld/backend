@@ -51,8 +51,7 @@ var createTrajets = function(Trajet, Station){
             trajets.push({
                 nb_station_start : numbers[station_rand1],
                 nb_station_end : numbers[station_rand2],
-                validite_start : new Date(),
-                validite_end : new Date(),
+                validite_end : new Date((new Date()).getTime()+3600000),
                 max_number : Math.floor(Math.random() * 10),
                 points : Math.floor(Math.random() * 100),
                 distance : Math.random() * 20,

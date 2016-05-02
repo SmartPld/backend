@@ -92,10 +92,10 @@ module.exports = function(Trajet) {
 
         if(!ctx.isNewInstance) {
             // On recup le trajet
+
             var trajet = ctx.currentInstance || ctx.instance;
 
-            trajet.validite_start = new Date();
-            trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
+            //trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
 
             /*Trajet.findById(trajet.id, function(err, originalTrajet){
                 if(err)
@@ -143,8 +143,8 @@ module.exports = function(Trajet) {
                             trajet.station_start = stationStartFound;
                             trajet.pos_station_start = stationStartFound.pos;
                             trajet.station_end = stationEndFound;
-                            trajet.validite_start = new Date();
-                            trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
+                            //trajet.validite_start = new Date();
+                            //trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
                             next();
                         } else {
                             next({status : 404, message : "Trajet number " + trajet.nb_station_end + " does not exists."});

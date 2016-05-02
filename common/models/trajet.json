@@ -26,10 +26,6 @@
       "type": "geopoint",
       "required": true
     },
-    "validite_start": {
-      "type": "date",
-      "required": true
-    },
     "validite_end": {
       "type": "date",
       "required": true
