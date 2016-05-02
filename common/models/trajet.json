@@ -61,5 +61,6 @@
     }
   },
   "acls": [],
-  "methods": {}
+  "methods": {},
+  "hidden": ["nb_station_start", "nb_station_end", "pos_station_start"]
 }
