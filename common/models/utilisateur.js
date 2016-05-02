@@ -221,7 +221,14 @@ module.exports = function(Utilisateur) {
                         throw err;
                     else {
                         if (userFound) {
-                            cb(err, userFound);
+                            if(currentUser.en_trajet){
+                                userFound.current_trajet(function(err, trajetFound){
+                                    userFound.trajet = trajetFound;
+                                    cb(err, userFound);
+                                });
+                            } else {
+                                cb(err, userFound);
+                            }
                         } else {
                             cb("User not found.", null);
                         }
