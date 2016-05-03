@@ -150,6 +150,7 @@ module.exports = function(Utilisateur) {
                                                 throw err;
                                         });
                                         userFound.points += current_trajet.points;
+                                        userFound.distance_totale_parcourue += current_trajet.distance;
                                         userFound.en_trajet = false;
                                         userFound.save(function(err,userModified){
                                             if (err){ throw err;}

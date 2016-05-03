@@ -66,9 +66,9 @@ var createTrajets = function(Trajet, Station){
 var createUsers = function(Utilisateur, Role, RoleMapping){
 
     Utilisateur.create([
-        {username: 'admin', email: 'adming@insa-lyon.fr', password: 'password', 'salt' : 'poiuytreza', points : 0},
-        {username: 'Guigui', email: 'guillaume.kheng@insa-lyon.fr', password: 'password', 'salt' : 'poiuytreza', points : 42},
-        {username: 'Kilian', email: 'kilian.ollivier@insa-lyon.fr', password: 'password', 'salt' : 'poiuytreza', points : 0}
+        {username: 'admin', email: 'adming@insa-lyon.fr', password: 'password', 'salt' : 'poiuytreza', points : 0, "distance_totale_parcourue" : 0},
+        {username: 'Guigui', email: 'guillaume.kheng@insa-lyon.fr', password: 'password', 'salt' : 'poiuytreza', points : 42, "distance_totale_parcourue" : 15},
+        {username: 'Kilian', email: 'kilian.ollivier@insa-lyon.fr', password: 'password', 'salt' : 'poiuytreza', points : 0, "distance_totale_parcourue" : 0}
     ], function(err, users){
         if(err)
             throw err;
