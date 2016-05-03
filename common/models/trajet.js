@@ -147,6 +147,8 @@ module.exports = function(Trajet) {
                             var COEFF_POINTS_KM = 5;
                             var COEFF_POINTS_ELEVATION = 2;
                             trajet.points = COEFF_POINTS_KM*(trajet.distance/1000) + COEFF_POINTS_ELEVATION*trajet.delta_elevation;
+                            //La distance est passée en mètre, on la stocke en kilomètre.
+                            trajet.distance = trajet.distance/1000;
                             next();
                         } else {
                             next({status : 404, message : "Station number " + trajet.nb_station_end + " does not exists."});
