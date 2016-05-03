@@ -147,11 +147,11 @@ module.exports = function(Trajet) {
                             //trajet.validite_end = new Date(trajet.validite_start.getTime() + 3600000);
                             next();
                         } else {
-                            next({status : 404, message : "Trajet number " + trajet.nb_station_end + " does not exists."});
+                            next({status : 404, message : "Station number " + trajet.nb_station_end + " does not exists."});
                         }
                     });
                 } else {
-                    next({status : 404, message : "Trajet number " + trajet.nb_station_end + " does not exists."});
+                    next({status : 404, message : "Station number " + trajet.nb_station_end + " does not exists."});
                 }
             });
         }
